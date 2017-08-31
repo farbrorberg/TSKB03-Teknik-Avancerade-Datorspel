@@ -27,7 +27,7 @@
 
 //constants
 const int initWidth=512,initHeight=512;
-GLfloat time = 0.5;
+GLfloat time;
 
 // Model-to-world matrix
 // Modify this matrix.
@@ -80,6 +80,10 @@ void init(void)
 
 void display(void)
 {
+
+	time = (GLfloat) glutGet(GLUT_ELAPSED_TIME);
+	time *= 0.0005;
+
 	printError("pre display");
 
 	// clear the screen
@@ -93,13 +97,18 @@ void display(void)
 
 	//Rotation and translation matricies
 	mat4 rot, trans, total;
-	time +=0.05;
 
-	rot = Ry(time*2);
-	trans = T(sin(time)/2, 0, 0);
-	total = Mult(rot, trans);
-	m = Mult(m,total);
+	rot = Ry(time);
+//	trans = T(sin(time)/2, 0, 0);
+//	total = Mult(rot, trans);
+	m = Mult(m,rot);
 
+	//Light source
+	vec3 lightColor = {1.0, 0.0, 0.0};
+
+	//Shader-variables
+	glUniform1f(glGetUniformLocation(program,"time"), time);
+	glUniform3f(glGetUniformLocation(program, "lightColor"), lightColor.x,lightColor.y, lightColor.z);
 	glUniformMatrix4fv(glGetUniformLocation(program, "viewMatrix"), 1, GL_TRUE, m.m);
 
 	//draw the model

@@ -14,11 +14,16 @@ uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
 
 out float shade;
+out vec3 vNorm;
+out vec3 vPos;
 
-//Phong shader(right?)
-void main(void)
+void main(void) //Phong
 {
-	shade = (mat3(viewMatrix)*in_Normal).y; // Fake shading
+    vPos = in_Position;
+
+    vec4 oNormal = projectionMatrix * viewMatrix * vec4(in_Normal, 1.0);
+    vNorm = normalize(vec3(oNormal.x, oNormal.y, oNormal.z));
+
 	gl_Position=projectionMatrix*viewMatrix*vec4(in_Position, 1.0);
 }
 
