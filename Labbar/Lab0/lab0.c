@@ -23,6 +23,11 @@
 #include "loadobj.h"
 //#include "zpr.h"
 #include "LoadTGA.h"
+#include "../common/GL_utilities.h"
+#include "../common/VectorUtils3.h"
+#include "../common/loadobj.h"
+#include "../common/LoadTGA.h"
+#include "../common/Mac/MicroGlut.h"
 
 
 //constants
@@ -36,6 +41,13 @@ mat4 objectExampleMatrix = {{ 1.0, 0.0, 0.0, 0.0,
                               0.0, 1.0, 0.0, 0.0,
                               0.0, 0.0, 1.0, 0.0,
                               0.0, 0.0, 0.0, 1.0}};
+
+mat4 translationMatrix = {{   1.0, 0.0, 0.0, 3.5,
+							  0.0, 1.0, 0.0, 0.0,
+							  0.0, 0.0, 1.0, 0.0,
+							  0.0, 0.0, 0.0, 1.0}};
+
+
 // World-to-view matrix. Usually set by lookAt() or similar.
 mat4 viewMatrix;
 // Projection matrix, set by a call to perspective().
@@ -44,6 +56,7 @@ mat4 projectionMatrix;
 // Globals
 // * Model(s)
 Model *bunny;
+Model *teapot;
 // * Reference(s) to shader program(s)
 GLuint program;
 // * Texture(s)
@@ -70,6 +83,8 @@ void init(void)
 	
 	// Upload geometry to the GPU:
 	bunny = LoadModelPlus("objects/stanford-bunny.obj");
+	teapot = LoadModelPlus("objects/teapot.obj");
+
 	printError("load models");
 
 	// Load textures
@@ -89,31 +104,33 @@ void display(void)
 	// clear the screen
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
+	//Light source and model-view-projection
+	vec3 lightColor = {1.0, 1.0, 1.0};
+	mat4 m = Mult(viewMatrix, objectExampleMatrix);
+
 	//activate the program, and set its variables
 	glUseProgram(program);
 	glUniformMatrix4fv(glGetUniformLocation(program, "projectionMatrix"), 1, GL_TRUE, projectionMatrix.m);
-
-	mat4 m = Mult(viewMatrix, objectExampleMatrix);
-
-	//Rotation and translation matricies
-	mat4 rot, trans, total;
-
-	rot = Ry(time);
-//	trans = T(sin(time)/2, 0, 0);
-//	total = Mult(rot, trans);
-	m = Mult(m,rot);
-
-	//Light source
-	vec3 lightColor = {1.0, 1.0, 1.0};
-
-	//Shader-variables
 	glUniform1f(glGetUniformLocation(program,"time"), time);
 	glUniform3f(glGetUniformLocation(program, "lightColor"), lightColor.x,lightColor.y, lightColor.z);
+
+	//Rotation and translation matricies
+	mat4 rot;
+	rot = Ry(time);
+	m = Mult(m,rot);
+
+	//draw the bunny
+	DrawModel(bunny, program, "in_Position", "in_Normal", NULL);
 	glUniformMatrix4fv(glGetUniformLocation(program, "viewMatrix"), 1, GL_TRUE, m.m);
 
-	//draw the model
-	DrawModel(bunny, program, "in_Position", "in_Normal", NULL);
-	
+	//translate MVP before rendering the teapot
+	m = Mult(m, translationMatrix);
+
+	//draw the teapot
+	DrawModel(teapot, program, "in_Position", "in_Normal", NULL);
+	glUniformMatrix4fv(glGetUniformLocation(program, "viewMatrix"), 1, GL_TRUE, m.m);
+
+
 	printError("display");
 	
 	glutSwapBuffers();

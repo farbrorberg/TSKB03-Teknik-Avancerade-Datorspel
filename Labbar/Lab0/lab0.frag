@@ -26,13 +26,14 @@ void main(void) //Phong shading
     float Ka = 0.5;
     float Ns = 3;
 
+    //Light-, reflection- and normal-vectors
     vec3 L = normalize(lightColor-vPos);
     vec3 N = normalize(vNorm);
     vec3 R = 2*dot(N,L)*N-L;
     vec3 V = normalize(-vPos);
 
-    vec3 Ispec = lightColor * Ks * Il * dot(N,L);
-    vec3 Idiff = lightColor * Kd * Il * pow(dot(R, V), Ns);
+    vec3 Idiff = lightColor * Kd * Il * dot(N,L);
+    vec3 Ispec = lightColor * Ks * Il * pow(dot(R, V), Ns);
     vec3 Iamb = lightColor * Ka * Ia;
 
     vec3 phongShade = Ispec + Idiff + Iamb;

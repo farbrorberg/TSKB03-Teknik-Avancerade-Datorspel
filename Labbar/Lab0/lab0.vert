@@ -21,8 +21,8 @@ void main(void) //Phong
 {
     vPos = in_Position;
 
-    vec4 oNormal = projectionMatrix * viewMatrix * vec4(in_Normal, 1.0);
-    vNorm = normalize(vec3(oNormal.x, oNormal.y, oNormal.z));
+    vec4 viewNormal = projectionMatrix * viewMatrix * vec4(in_Normal, 1.0);
+    vNorm = normalize(vec3(viewNormal.x, viewNormal.y, viewNormal.z));
 
 	gl_Position=projectionMatrix*viewMatrix*vec4(in_Position, 1.0);
 }
