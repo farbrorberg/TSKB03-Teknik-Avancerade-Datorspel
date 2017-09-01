@@ -104,7 +104,7 @@ void display(void)
 	m = Mult(m,rot);
 
 	//Light source
-	vec3 lightColor = {1.0, 0.0, 0.0};
+	vec3 lightColor = {1.0, 1.0, 1.0};
 
 	//Shader-variables
 	glUniform1f(glGetUniformLocation(program,"time"), time);
