@@ -12,6 +12,7 @@ in vec3 vPos;
 
 uniform vec3 lightColor;
 
+
 out vec4 out_Color;
 
 void main(void) //Phong shading
@@ -25,9 +26,10 @@ void main(void) //Phong shading
     float Kd = 0.5;
     float Ka = 0.5;
     float Ns = 3;
+    vec3 lightPos = vec3(0.0, 5.0, 0.0);
 
     //Light-, reflection- and normal-vectors
-    vec3 L = normalize(lightColor-vPos);
+    vec3 L = normalize(lightPos-vPos);
     vec3 N = normalize(vNorm);
     vec3 R = 2*dot(N,L)*N-L;
     vec3 V = normalize(-vPos);
@@ -38,6 +40,6 @@ void main(void) //Phong shading
 
     vec3 phongShade = Ispec + Idiff + Iamb;
 
-	out_Color=vec4(phongShade,1.0);
+	out_Color=vec4(phongShade, 1.0);
 }
 

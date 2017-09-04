@@ -42,10 +42,15 @@ mat4 objectExampleMatrix = {{ 1.0, 0.0, 0.0, 0.0,
                               0.0, 0.0, 1.0, 0.0,
                               0.0, 0.0, 0.0, 1.0}};
 
-mat4 translationMatrix = {{   1.0, 0.0, 0.0, 3.5,
+mat4 translationMatrix = {{   1.0, 0.0, 0.0, 2.0,
 							  0.0, 1.0, 0.0, 0.0,
 							  0.0, 0.0, 1.0, 0.0,
 							  0.0, 0.0, 0.0, 1.0}};
+
+mat4 scaleMatrix = {{ 	0.5, 0.0, 0.0, 0.0,
+						0.0, 0.5, 0.0, 0.0,
+						0.0, 0.0, 0.5, 0.0,
+						0.0, 0.0, 0.0, 1.0 }};
 
 
 // World-to-view matrix. Usually set by lookAt() or similar.
@@ -105,31 +110,35 @@ void display(void)
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 
 	//Light source and model-view-projection
-	vec3 lightColor = {1.0, 1.0, 1.0};
+	vec3 whiteColor = {1.0, 1.0, 1.0};
+	vec3 blueColor =  {0.0, 0.0, 1.0};
+	vec3 redColor =  {1.0, 0.0, 0.0};
+
 	mat4 m = Mult(viewMatrix, objectExampleMatrix);
+	m = Mult(m, scaleMatrix);
 
 	//activate the program, and set its variables
 	glUseProgram(program);
 	glUniformMatrix4fv(glGetUniformLocation(program, "projectionMatrix"), 1, GL_TRUE, projectionMatrix.m);
 	glUniform1f(glGetUniformLocation(program,"time"), time);
-	glUniform3f(glGetUniformLocation(program, "lightColor"), lightColor.x,lightColor.y, lightColor.z);
+	glUniform3f(glGetUniformLocation(program, "lightColor"), whiteColor.x, whiteColor.y, whiteColor.z);
 
-	//Rotation and translation matricies
+	//Rotation matrix
 	mat4 rot;
 	rot = Ry(time);
 	m = Mult(m,rot);
 
 	//draw the bunny
-	DrawModel(bunny, program, "in_Position", "in_Normal", NULL);
 	glUniformMatrix4fv(glGetUniformLocation(program, "viewMatrix"), 1, GL_TRUE, m.m);
+	DrawModel(bunny, program, "in_Position", "in_Normal", NULL);
 
 	//translate MVP before rendering the teapot
 	m = Mult(m, translationMatrix);
 
 	//draw the teapot
-	DrawModel(teapot, program, "in_Position", "in_Normal", NULL);
+	glUniform3f(glGetUniformLocation(program, "lightColor"), blueColor.x, blueColor.y, blueColor.z);
 	glUniformMatrix4fv(glGetUniformLocation(program, "viewMatrix"), 1, GL_TRUE, m.m);
-
+	DrawModel(teapot, program, "in_Position", "in_Normal", NULL);
 
 	printError("display");
 	
