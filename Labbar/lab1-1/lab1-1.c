@@ -65,8 +65,8 @@ Model* squareModel;
 //----------------------Globals-------------------------------------------------
 Point3D cam, point;
 Model *model1;
-FBOstruct *fbo1, *fbo2, *fbo3;
-GLuint phongshader = 0, plaintextureshader = 0, truncationshader = 0, lowpassshader = 0;
+FBOstruct *fbo1, *fbo2, *fbo3, *fbo4;
+GLuint phongshader = 0, plaintextureshader = 0, truncationshader = 0, lowpassx = 0, lowpassy = 0, combine = 0;
 
 //-------------------------------------------------------------------------------------
 
@@ -84,14 +84,17 @@ void init(void)
 	// Load and compile shaders
 	plaintextureshader = loadShaders("plaintextureshader.vert", "plaintextureshader.frag");  // puts texture on teapot
 	phongshader = loadShaders("phong.vert", "phong.frag");  // renders with light (used for initial renderin of teapot)
-	lowpassshader = loadShaders("lowpass.vert", "lowpass.frag");
+	lowpassx = loadShaders("lowpass.vert", "lowpassx.frag");
+	lowpassy = loadShaders("lowpass.vert", "lowpassy.frag");
 	truncationshader = loadShaders("truncation.vert", "truncation.frag");
+	combine = loadShaders("combine.vert", "combine.frag");
 
 	printError("init shader");
 
 	fbo1 = initFBO(W, H, 0);
 	fbo2 = initFBO(W, H, 0); //Truncation
 	fbo3 = initFBO(W, H, 0); //Blooming
+	fbo4 = initFBO(W, H, 0); //Combine
 
 	// load the model
 //	model1 = LoadModelPlus("teapot.obj");
@@ -152,53 +155,52 @@ void display(void)
 
 	DrawModel(model1, phongshader, "in_Position", "in_Normal", NULL);
 
+	glDisable(GL_CULL_FACE);
+	glDisable(GL_DEPTH_TEST);
+
 	/*
 	 *  Truncation
 	 */
 	//Use values from fbo1 (out_color) in fbo2 to truncate values above 1
-	useFBO(fbo2, fbo1, 0L);
 	glUseProgram(truncationshader);
-	glClearColor(0.0, 0.0, 0.0, 0);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	glDisable(GL_CULL_FACE);
-	glDisable(GL_DEPTH_TEST);
-
-	glUniform1f(glGetUniformLocation(truncationshader, "texSize"), W);
-	glUniform1f(glGetUniformLocation(truncationshader, "texUnit"), 0);
+	useFBO(fbo2, fbo1, 0L);
 	DrawModel(squareModel,truncationshader,"in_Position", NULL, "in_TexCoord");
 
 	/*
 	 *  Blooming
 	 */
-	//Use values from fbo2 (out_color) in fbo3 for blooming effect
-	useFBO(fbo3, fbo2, 0L);
-	glUseProgram(lowpassshader);
-	glClearColor(0.0, 0.0, 0.0, 0);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//Ping-ponging
+	for (int i = 0; i < 30; i++){
+		glUseProgram(lowpassx);
+		useFBO(fbo3, fbo2, 0L);
+		DrawModel(squareModel, lowpassx,"in_Position", NULL, "in_TexCoord");
 
-	glUniform1f(glGetUniformLocation(lowpassshader, "texSize"), W);
-	glUniform1f(glGetUniformLocation(lowpassshader, "texUnit"), 0);
-	DrawModel(squareModel,lowpassshader,"in_Position", NULL, "in_TexCoord");
+		glUseProgram(lowpassy);
+		useFBO(fbo2, fbo3, 0L);
+		DrawModel(squareModel, lowpassy, "in_Position", NULL, "in_TexCoord");
+	}
 
-	useFBO(fbo3, fbo3, 0L);
-	DrawModel(squareModel, lowpassshader, "in_Position", NULL, "in_TexCoord");
+	/*
+	 * Combine
+	 */
+	glUseProgram(combine);
+	glUniform1i(glGetUniformLocation(combine, "texUnit2"), 1);
 
+	useFBO(fbo4, fbo1, fbo2);
+	DrawModel(squareModel, combine, "in_Position", NULL, "in_TexCoord");
 
 	// Done rendering the FBO! Set up for rendering on screen, using the result as texture!
 //	glFlush(); // Can cause flickering on some systems. Can also be necessary to make drawing complete.
-	useFBO(0L, fbo1, fbo3); //The 2 in's should be the original object + the bloom
+	useFBO(0L, fbo4, 0L); //The 2 in's should be the original object + the bloom
 
 	// Activate second shader program
 	glClearColor(0.0, 0.0, 0.0, 0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	glUseProgram(plaintextureshader);
 
 	glDisable(GL_CULL_FACE);	//Disable backface culling
 	glDisable(GL_DEPTH_TEST);	//Disable z-buffering
-
-	glUniform1f(glGetUniformLocation(plaintextureshader, "object"), 0);
-	glUniform1f(glGetUniformLocation(plaintextureshader, "bloom"), 1);
 	DrawModel(squareModel, plaintextureshader, "in_Position", NULL, "in_TexCoord");
 
 	glutSwapBuffers();

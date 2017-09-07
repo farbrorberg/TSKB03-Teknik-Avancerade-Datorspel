@@ -2,15 +2,15 @@
 #version 150
 
 in vec2 outTexCoord;
-
 uniform sampler2D texUnit;
-uniform sampler2D object;
-uniform sampler2D bloom;
-
-out vec4 out_Color;
+uniform sampler2D texUnit2;
+out vec4 outColor;
 
 void main(void)
 {
-    out_Color = texture(object, outTexCoord) + texture(bloom, outTexCoord);
+    outColor = texture(texUnit, outTexCoord);
+//    outColor = 0.2*texture(texUnit, outTexCoord) + 1.0*texture(texUnit2, outTexCoord);
+
 }
+
 
