@@ -9,6 +9,7 @@ in vec3 Ps;
 in vec3 Pt;
 in vec3 pixPos;  // Needed for specular reflections
 uniform sampler2D texUnit;
+uniform float factor;
 out vec4 out_Color;
 
 void main(void)
@@ -17,9 +18,23 @@ void main(void)
 	
 	// Calculate gradients here
 	float offset = 1.0 / 256.0; // texture size, same in both directions
-	
-    vec3 normal = normalize(out_Normal);
+
+
+	// bs = b[s+1, t] - b[s, t]
+    // bt = b[s, t+1] - b[s, t]
+    vec3 bs = texture(texUnit, outTexCoord + vec2(offset, 0.0)).xyz - texture(texUnit, outTexCoord).xyz;
+    vec3 bt = texture(texUnit, outTexCoord + vec2(0.0, offset)).xyz - texture(texUnit, outTexCoord).xyz;
+
+
+    //Mvt matrix - for converting into texture coordinates
+    mat3 Mvt = transpose(mat3(Ps, Pt, normalize(out_Normal)));
+
+    // n' = n +- bs*Ps +- bt*Pt
+    vec3 normal = normalize(out_Normal + factor*(bs*Ps) + factor*(bt*Pt));
+
+
 	// Simplified lighting calculation.
 	// A full solution would include material, ambient, specular, light sources, multiply by texture.
-    out_Color = vec4( dot(normal, light)) * texture(texUnit, outTexCoord);
+	out_Color = vec4( dot(normal, Mvt*light));  //Texture coordinates
+//	out_Color = vec4( dot(normal, light));      //View coordinates
 }
