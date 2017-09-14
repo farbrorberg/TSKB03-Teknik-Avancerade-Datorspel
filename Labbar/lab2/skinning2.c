@@ -94,7 +94,7 @@ void initBoneWeights(void)
 	long	row, corner;
 	int bone;
 
-	// sätter värden till alla vertexar i meshen
+	// sï¿½tter vï¿½rden till alla vertexar i meshen
 	for (row = 0; row < kMaxRow; row++)
 		for (corner = 0; corner < kMaxCorners; corner++)
 		{
@@ -154,7 +154,7 @@ void BuildCylinder()
 {
   long	row, corner, cornerIndex;
 
-  // sätter värden till alla vetexar i meshen
+  // sï¿½tter vï¿½rden till alla vetexar i meshen
   for (row = 0; row < kMaxRow; row++)
     for (corner = 0; corner < kMaxCorners; corner++)
       {
@@ -186,7 +186,7 @@ void BuildCylinder()
 	    g_poly[cornerIndex * 2 + 1].v3 = cornerIndex + kMaxCorners;
 	  }
 	else
-	  { // Specialfall: sista i varvet, gåu runt hörnet korrekt
+	  { // Specialfall: sista i varvet, gï¿½u runt hï¿½rnet korrekt
 	    cornerIndex = row * kMaxCorners + corner;
 	    g_poly[cornerIndex * 2].v1 = cornerIndex;
 	    g_poly[cornerIndex * 2].v2 = cornerIndex + 1 - kMaxCorners;
@@ -198,7 +198,7 @@ void BuildCylinder()
 	  }
       }
 
-  // lägger en kopia av orginal modellen i g_vertsRes
+  // lï¿½gger en kopia av orginal modellen i g_vertsRes
   memcpy(g_vertsRes,  g_vertsOrg, kMaxRow * kMaxCorners* sizeof(vec3));
   memcpy(g_normalsRes,  g_normalsOrg, kMaxRow * kMaxCorners* sizeof(vec3));
 }
@@ -208,7 +208,7 @@ void BuildCylinder()
 //		B O N E
 // Desc:	en enkel ben-struct med en 
 //			pos-vektor och en rot-vektor 
-//			rot vektorn skulle lika gärna 
+//			rot vektorn skulle lika gï¿½rna 
 //			kunna vara av 3x3 men VectorUtils2 har bara 4x4
 typedef struct Bone
 {
@@ -219,8 +219,8 @@ typedef struct Bone
 
 ///////////////////////////////////////
 //		G _ B O N E S
-// vårt skelett
-Bone g_bones[kMaxBones]; // Ursprungsdata, Šndra ej
+// vï¿½rt skelett
+Bone g_bones[kMaxBones]; // Ursprungsdata, ï¿½ndra ej
 Bone g_bonesRes[kMaxBones]; // Animerat
 
 
@@ -250,7 +250,7 @@ void DeformCylinder()
   //float w[kMaxBones];
   int row, corner;
 
-  // för samtliga vertexar 
+  // fÃ¶r samtliga vertexar
   for (row = 0; row < kMaxRow; row++)
   {
     for (corner = 0; corner < kMaxCorners; corner++)
@@ -258,7 +258,7 @@ void DeformCylinder()
       // ---------=========  UPG 4 ===========---------
       // TODO: skinna meshen mot alla benen.
       //
-      // data som du kan använda:
+      // data som du kan anvÃ¤nda:
       // g_bonesRes[].rot
       // g_bones[].pos
       // g_boneWeights
@@ -272,12 +272,12 @@ void DeformCylinder()
 
 /////////////////////////////////////////////
 //		A N I M A T E  B O N E S
-// Desc:	en väldigt enkel animation av skelettet
+// Desc:	en vï¿½ldigt enkel animation av skelettet
 //			vrider ben 1 i en sin(counter) 
 void animateBones(void)
 {
 	int bone;
-	// Hur mycket kring varje led? €ndra gŠrna.
+	// Hur mycket kring varje led? ï¿½ndra gï¿½rna.
 	float angleScales[10] = { 1.f, 1.f, 1.f, 1.f, 1.f, 1.f, 1.f, 1.f, 1.f, 1.f };
 
 	float time = glutGet(GLUT_ELAPSED_TIME) / 1000.0;
@@ -295,7 +295,7 @@ void animateBones(void)
 
 ///////////////////////////////////////////////
 //		S E T  B O N E  R O T A T I O N
-// Desc:	sätter bone rotationen i vertex shadern
+// Desc:	sï¿½tter bone rotationen i vertex shadern
 // (Ej obligatorisk.)
 void setBoneRotation(void)
 {
@@ -304,7 +304,7 @@ void setBoneRotation(void)
 
 ///////////////////////////////////////////////
 //		 S E T  B O N E  L O C A T I O N
-// Desc:	sätter bone positionen i vertex shadern
+// Desc:	sï¿½tter bone positionen i vertex shadern
 // (Ej obligatorisk.)
 void setBoneLocation(void)
 {
@@ -313,13 +313,13 @@ void setBoneLocation(void)
 
 ///////////////////////////////////////////////
 //		 D R A W  C Y L I N D E R
-// Desc:	sätter bone positionen i vertex shadern
+// Desc:	sï¿½tter bone positionen i vertex shadern
 void DrawCylinder()
 {
   animateBones();
 
   // ---------=========  UPG 2 (extra) ===========---------
-  // ersätt DeformCylinder med en vertex shader som gör vad DeformCylinder gör.
+  // ersï¿½tt DeformCylinder med en vertex shader som gï¿½r vad DeformCylinder gï¿½r.
   // begynelsen till shader koden ligger i filen "ShaderCode.vert" ...
   // 
 	

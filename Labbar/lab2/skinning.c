@@ -312,7 +312,6 @@ void setBoneRotation(void)
 	// till vertexshadern
 	glUniformMatrix4fv(glGetUniformLocation(g_shader, "mBenRot1"), 1, GL_TRUE, g_bones[0].rot.m);
 	glUniformMatrix4fv(glGetUniformLocation(g_shader, "mBenRot2"), 1, GL_TRUE, g_bones[1].rot.m);
-
 }
 
 

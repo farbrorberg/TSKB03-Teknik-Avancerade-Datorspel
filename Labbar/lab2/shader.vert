@@ -24,12 +24,19 @@ void main(void)
 
     mat4 mBen1, mBen2;
 
-    mBen1 = mBenRot1 * mBenPos1;
-    mBen2 = mBenRot2 * mBenPos2;
+    mBen1 = mBenPos1 * mBenRot1;
+    mBen2 = mBenPos2 * mBenRot2;
+
+
+    // v_ben2 = M^(-1)_ben2 * M^(-1)_ben1 * v_m
+//     vec3 v_ben1 = inverse(mBen1) * vec4(in_Position, 1.0);
+//    vec3 v_ben2 = inverse(mBen1) * inverse(mBen2) * vec4(in_Position, 1.0);
+//    vec4 wMv1 = in_TexCoord.x * mBen1 * vec4(v_ben2, 1.0);
+//    vec4 wMv2 = in_TexCoord.y * mBen2 * vec4(v_ben2, 1.0);
 
     // v'_m = (w_1 * M_ben1 * v_1) + (w_2 * M_ben2 * v_2)
-    vec4 wMv1 = in_TexCoord.x * mBen1 * vec4(in_Position, 1.0);
-    vec4 wMv2 = in_TexCoord.y * mBen2 * vec4(in_Position, 1.0);
+    vec4 wMv1 = in_TexCoord.x * mBen1 * inverse(mBenPos1) * vec4(in_Position, 1.0);
+    vec4 wMv2 = in_TexCoord.y * mBen2 * inverse(mBenPos2) * vec4(in_Position, 1.0);
 
     vec4 vPrim = (wMv1 + wMv2);
 

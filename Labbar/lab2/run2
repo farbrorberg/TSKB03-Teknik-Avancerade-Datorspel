@@ -1,0 +1,6 @@
+#!/bin/bash
+
+gcc skinning2.c ../common/*.c ../common/Mac/MicroGlut.m -o skinning2 -framework OpenGL -framework Cocoa -I../common/Mac -I../common
+
+./skinning2
+
