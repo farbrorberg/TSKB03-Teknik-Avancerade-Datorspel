@@ -6,11 +6,6 @@ in vec3 in_Normal;
 in vec2 in_TexCoord;
 uniform mat4 matrix;
 
-uniform mat4 mBenRot1;
-uniform mat4 mBenRot2;
-uniform mat4 mBenPos1;
-uniform mat4 mBenPos2;
-
 out vec4 g_color;
 const vec3 lightDir = normalize(vec3(0.3, 0.5, 1.0));
 
@@ -21,24 +16,7 @@ const vec3 lightDir = normalize(vec3(0.3, 0.5, 1.0));
 
 void main(void)
 {
-    mat4 mBen1, mBen2;
-
-    mBen1 = mBenPos1 * mBenRot1;
-    mBen2 = mBenPos2 * mBenRot2;
-
-    // v_ben2 = M^(-1)_ben2 * M^(-1)_ben1 * v_m
-//    vec3 v_ben2 = inverse(mBen1) * inverse(mBen2) * vec4(in_Position, 1.0);
-//    vec4 wMv1 = in_TexCoord.x * mBen1 * vec4(v_ben2, 1.0);
-//    vec4 wMv2 = in_TexCoord.y * mBen2 * vec4(v_ben2, 1.0);
-
-    // v'_m = (w_1 * M_ben1 * v_1) + (w_2 * M_ben2 * v_2)
-    vec4 wMv1 = in_TexCoord.x * mBen1 * inverse(mBenPos1) * vec4(in_Position, 1.0);
-    vec4 wMv2 = in_TexCoord.y * mBen2 * inverse(mBenPos2) * vec4(in_Position, 1.0);
-
-    vec4 vPrim = (wMv1 + wMv2);
-
     // transformera resultatet med ModelView- och Projection-matriserna
-//	gl_Position =  matrix * vPrim;
 	gl_Position =  matrix * vec4(in_Position, 1.0);
 
 	// sätt röd+grön färgkanal till vertex Weights

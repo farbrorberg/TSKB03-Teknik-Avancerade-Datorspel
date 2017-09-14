@@ -245,10 +245,42 @@ void setupBones(void)
 // Desc:	deformera cylinder meshen enligt skelettet
 void DeformCylinder()
 {
-  //vec3 v[kMaxBones];
-
-  //float w[kMaxBones];
   int row, corner;
+
+	//All bone T-matrices (Position)
+	mat4 T_ben[kMaxBones];
+
+	for (int i = 0; i < kMaxBones; ++i) {
+		T_ben[i] = T(g_bonesRes[i].pos.x, g_bonesRes[i].pos.y, g_bonesRes[i].pos.z);
+	}
+
+	//All bone matrices ( Pos * Rot)
+	mat4 M_ben[kMaxBones];
+	for (int i = 0; i <kMaxBones; ++i) {
+		M_ben[i] = Mult(T_ben[i], g_bonesRes[i].rot);
+	}
+
+	// All bone inversions
+	mat4 MI_ben[kMaxBones];
+	for (int i = 0; i <kMaxBones; ++i) {
+		MI_ben[i] = InvertMat4(M_ben[i]);
+	}
+	// All bone' -> M'_ben = T_vila * R_vila * R_anim
+	mat4 MP_ben[kMaxBones];
+
+	mat4 Mi[kMaxBones];
+	MP_ben[0] = M_ben[0];
+
+	Mi[0] = Mult(MP_ben[0], MI_ben[0]);
+
+	for (int i = 1; i < kMaxBones; ++i) {
+		MP_ben[i] = Mult(MP_ben[i - 1], Mult(T(
+				g_bonesRes[i].pos.x - g_bonesRes[i-1].pos.x,
+				g_bonesRes[i].pos.y - g_bonesRes[i-1].pos.y,
+				g_bonesRes[i].pos.z - g_bonesRes[i-1].pos.z),
+				g_bonesRes[i].rot));
+		Mi[i] = Mult(MP_ben[i], MI_ben[i]);
+	}
 
   // för samtliga vertexar
   for (row = 0; row < kMaxRow; row++)
@@ -264,7 +296,16 @@ void DeformCylinder()
       // g_boneWeights
       // g_vertsOrg
       // g_vertsRes
-      
+
+		// v'_m = (w_1 * Mi * v_1) + (w_2 * Mi * v_2) + .....
+		g_vertsRes[row][corner].x = 0;
+		g_vertsRes[row][corner].y = 0;
+		g_vertsRes[row][corner].z = 0;
+		for (int i = 0; i < kMaxBones; ++i) {
+			g_vertsRes[row][corner] = VectorAdd(
+					g_vertsRes[row][corner],
+					ScalarMult(MultVec3(Mi[i], g_vertsOrg[row][corner]), g_boneWeights[row][corner][i]));
+		}
     }
   }
 }
@@ -272,7 +313,7 @@ void DeformCylinder()
 
 /////////////////////////////////////////////
 //		A N I M A T E  B O N E S
-// Desc:	en v�ldigt enkel animation av skelettet
+// Desc:	en väldigt enkel animation av skelettet
 //			vrider ben 1 i en sin(counter) 
 void animateBones(void)
 {
@@ -415,7 +456,7 @@ int main(int argc, char **argv)
 			kMaxRow*kMaxCorners,
 			kMaxg_poly * 3);
 
-  g_shader = loadShaders("shader.vert" , "shader.frag");
+  g_shader = loadShaders("shader2.vert" , "shader.frag");
 
   glutMainLoop();
   exit(0);
