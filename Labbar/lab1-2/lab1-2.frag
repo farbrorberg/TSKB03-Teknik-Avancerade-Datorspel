@@ -18,23 +18,40 @@ void main(void)
 	
 	// Calculate gradients here
 	float offset = 1.0 / 256.0; // texture size, same in both directions
+	vec2 tc = outTexCoord;
 
 
+    /*
+    *   VY-KOORDINATED
+    */
 	// bs = b[s+1, t] - b[s, t]
     // bt = b[s, t+1] - b[s, t]
-    vec3 bs = texture(texUnit, outTexCoord + vec2(offset, 0.0)).xyz - texture(texUnit, outTexCoord).xyz;
-    vec3 bt = texture(texUnit, outTexCoord + vec2(0.0, offset)).xyz - texture(texUnit, outTexCoord).xyz;
+//    vec3 bs = texture(texUnit, tc + vec2(offset, 0.0)).xyz - texture(texUnit, tc).xyz;
+//    vec3 bt = texture(texUnit, tc + vec2(0.0, offset)).xyz - texture(texUnit, tc).xyz;
+//
+//
+//    // n' = n +- bs*Ps +- bt*Pt
+//    vec3 normal = normalize(out_Normal + factor*(bs*Ps) + factor*(bt*Pt));
+//
+//	out_Color = vec4( dot(normal, light));
 
+
+	/*tat
+    *   TEXTUR-KOORDINATED
+    */
+
+    vec4 ds = texture(texUnit, vec2(tc.x+offset, tc.y)) - texture(texUnit, vec2(tc.x-offset, tc.y));
+    vec4 dt = texture(texUnit, vec2(tc.x, tc.y+offset)) - texture(texUnit, vec2(tc.x, tc.y-offset));
 
     //Mvt matrix - for converting into texture coordinates
-    mat3 Mvt = transpose(mat3(Ps, Pt, normalize(out_Normal)));
+    mat3 Mvt = transpose(mat3(Ps, Pt, out_Normal));
 
-    // n' = n +- bs*Ps +- bt*Pt
-    vec3 normal = normalize(out_Normal + factor*(bs*Ps) + factor*(bt*Pt));
+    // n' = n + ds*Ps + dt*Pt - Är detta korrekt?
+    vec3 normal = normalize(out_Normal + ds.xyz*Ps + dt.xyz*Pt);
+    //Eller är detta korrekt?
+//    vec3 normal = normalize(vec3(ds.x, ds.y, 1.0));
 
+    //In texture coordinate space
+    out_Color = vec4( dot(normal, Mvt*light));
 
-	// Simplified lighting calculation.
-	// A full solution would include material, ambient, specular, light sources, multiply by texture.
-	out_Color = vec4( dot(normal, Mvt*light));  //Texture coordinates
-//	out_Color = vec4( dot(normal, light));      //View coordinates
 }
