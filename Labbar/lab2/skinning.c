@@ -239,18 +239,21 @@ void DeformCylinder()
 			//v_ben2 = M^(-1)_ben1 * M^(-1)_ben2 * v_m
 			//vec3 v_ben2 = MultVec3(Mult(MI_ben1, MI_ben2), g_vertsRes[row][corner]);
 
+			/*
+			 *  	PART 1
+			 */
 			//Från ben- till modell-koordinater
 			//v_m = M_ben1 * M_ben2 * v_ben2
 			//vec3 v_m = MultVec3(Mult(M_ben1, M_ben2), v_ben2);
 
 			//v'_m = M'_ben1 * M'_ben2 * M^(-1)_ben2 * M^(-1)_ben1 * v_m
-//			vec3 vPrim = MultVec3(Mult(Mult(MP_ben1, MP_ben2), Mult(MI_ben1, MI_ben2)), g_vertsOrg[row][corner]);
-//
-//			if( weight[row]  > 0 ){
-//				g_vertsRes[row][corner].x = vPrim.x * weight[row];
-//				g_vertsRes[row][corner].y = vPrim.y * weight[row];
-//				g_vertsRes[row][corner].z = vPrim.z * weight[row];
-//			}
+			vec3 vPrim = MultVec3(Mult(Mult(MP_ben1, MP_ben2), Mult(MI_ben1, MI_ben2)), g_vertsOrg[row][corner]);
+
+			if( weight[row]  > 0 ){
+				g_vertsRes[row][corner].x = vPrim.x * weight[row];
+				g_vertsRes[row][corner].y = vPrim.y * weight[row];
+				g_vertsRes[row][corner].z = vPrim.z * weight[row];
+			}
 
 			// ---=========	Uppgift 2: Soft skinning i CPU ===========------
 			// Deformera cylindern enligt det skelett som finns
@@ -264,16 +267,20 @@ void DeformCylinder()
 			// g_vertsRes innehåller den vertexdata som skickas till OpenGL.
 
 
+
+			/*
+			 *  	PART 2
+			 */
 			// v'_m = (w_1 * M_ben1 * v_1) + (w_2 * M_ben2 * v_2)
 			// (1 - weight[row] <=> The first 4 slots belong to bone1, the other 4 to bone2
-			vec3 vPrim = VectorAdd(
-					ScalarMult(MultVec3(M_ben1, g_vertsOrg[row][corner]),(1 - weight[row])),
-					ScalarMult(MultVec3(M_ben2, g_vertsOrg[row][corner]),weight[row])
-			);
-
-				g_vertsRes[row][corner].x = vPrim.x;
-				g_vertsRes[row][corner].y = vPrim.y;
-				g_vertsRes[row][corner].z = vPrim.z;
+//			vec3 vPrim = VectorAdd(
+//					ScalarMult(MultVec3(M_ben1, g_vertsOrg[row][corner]),(1 - weight[row])),
+//					ScalarMult(MultVec3(M_ben2, g_vertsOrg[row][corner]),weight[row])
+//			);
+//
+//			g_vertsRes[row][corner].x = vPrim.x;
+//			g_vertsRes[row][corner].y = vPrim.y;
+//			g_vertsRes[row][corner].z = vPrim.z;
 		}
 	}
 }
@@ -298,36 +305,45 @@ void animateBones(void)
 
 ///////////////////////////////////////////////
 //		S E T	B O N E	R O T A T I O N
-// Desc:	s�tter bone rotationen i vertex shadern
+// Desc:	sätter bone rotationen i vertex shadern
 void setBoneRotation(void)
 {
 	// Uppgift 3 TODO: Här behöver du skicka över benens rotation
 	// till vertexshadern
+	glUniformMatrix4fv(glGetUniformLocation(g_shader, "mBenRot1"), 1, GL_TRUE, g_bones[0].rot.m);
+	glUniformMatrix4fv(glGetUniformLocation(g_shader, "mBenRot2"), 1, GL_TRUE, g_bones[1].rot.m);
+
 }
 
 
 ///////////////////////////////////////////////
 //		 S E T	B O N E	L O C A T I O N
-// Desc:	s�tter bone positionen i vertex shadern
+// Desc:	sätter bone positionen i vertex shadern
 void setBoneLocation(void)
 {
-	// Uppgift 3 TODO: H�r beh�ver du skicka �ver benens position
+	// Uppgift 3 TODO: Här behöver du skicka över benens position
 	// till vertexshadern
+	mat4 T_ben1 = T(g_bones[0].pos.x, g_bones[0].pos.y, g_bones[0].pos.z);
+	mat4 T_ben2 = T(g_bones[1].pos.x, g_bones[1].pos.y, g_bones[1].pos.z);
+
+	glUniformMatrix4fv(glGetUniformLocation(g_shader, "mBenPos1"), 1, GL_TRUE, T_ben1.m);
+	glUniformMatrix4fv(glGetUniformLocation(g_shader, "mBenPos2"), 1, GL_TRUE, T_ben2.m);
 }
 
 
 ///////////////////////////////////////////////
 //		 D R A W	C Y L I N D E R
-// Desc:	s�tter bone positionen i vertex shadern
+// Desc:	sätter bone positionen i vertex shadern
 void DrawCylinder()
 {
 	animateBones();
 
 	// ---------=========	UPG 2 ===========---------
-	// Ers�tt DeformCylinder med en vertex shader som g�r vad DeformCylinder g�r.
+	// Ersätt DeformCylinder med en vertex shader som gör vad DeformCylinder gör.
 	// Begynnelsen till shaderkoden ligger i filen "shader.vert" ...
+
 	
-	DeformCylinder();
+//	DeformCylinder();
 	
 	setBoneLocation();
 	setBoneRotation();
