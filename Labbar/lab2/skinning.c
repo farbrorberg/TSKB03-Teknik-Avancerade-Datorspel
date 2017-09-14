@@ -81,7 +81,7 @@ void BuildCylinder()
 	long	row, corner, cornerIndex;
 	float g_vertstex[kMaxRow][kMaxCorners][2];
 
-	// sätter värden till alla vertexar i meshen
+	// sÃ¤tter vÃ¤rden till alla vertexar i meshen
 	for (row = 0; row < kMaxRow; row++)
 		for (corner = 0; corner < kMaxCorners; corner++)
 		{
@@ -117,7 +117,7 @@ void BuildCylinder()
 				g_poly[cornerIndex * 2 + 1].v3 = cornerIndex + kMaxCorners;
 			}
 			else
-			{ // Specialfall: sista i varvet, gåu runt hörnet korrekt
+			{ // Specialfall: sista i varvet, gÃ¥ runt hÃ¶rnet korrekt
 				cornerIndex = row * kMaxCorners + corner;
 				g_poly[cornerIndex * 2].v1 = cornerIndex;
 				g_poly[cornerIndex * 2].v2 = cornerIndex + 1 - kMaxCorners;
@@ -129,7 +129,7 @@ void BuildCylinder()
 			}
 		}
 	
-	// lägger en kopia av originalmodellen i g_vertsRes & g_normalsRes
+	// lÃ¤gger en kopia av originalmodellen i g_vertsRes & g_normalsRes
 
 	for (row = 0; row < kMaxRow; row++)
 		for (corner = 0; corner < kMaxCorners; corner++)
@@ -164,15 +164,15 @@ typedef struct Bone
 
 ///////////////////////////////////////
 //		G _ B O N E S
-// vårt skelett; just nu innehåller det 2 ben ...
+// vÃ¥rt skelett; just nu innehÃ¥ller det 2 ben ...
 Bone g_bones[2];
 
 
 ///////////////////////////////////////////////////////
 //		S E T U P	B O N E S
 //
-// Desc:	sätter ut ben 0 i origo och 
-//			ben 1 på pos (4.5, 0, 0)
+// Desc:	sÃ¤tter ut ben 0 i origo och
+//			ben 1 pp pos (4.5, 0, 0)
 void setupBones(void)
 {
 	g_bones[0].pos = SetVector(0.0f, 0.0f, 0.0f);
@@ -190,8 +190,29 @@ void DeformCylinder()
 {
 	// Point3D v1, v2;
 	int row, corner;
-	
-	// för samtliga vertexar 
+
+	//T_ben1
+	//T_ben1
+	mat4 T_ben1 = T(g_bones[0].pos.x, g_bones[0].pos.y, g_bones[0].pos.z);
+	mat4 T_ben2 = T(g_bones[1].pos.x, g_bones[1].pos.y, g_bones[1].pos.z);
+
+	//M_ben1 = T_ben1 * R_ben1
+	//M_ben2 = T_ben2 * R_ben2
+	mat4 M_ben1 = Mult(T_ben1, g_bones[0].rot);
+	mat4 M_ben2 = Mult(T_ben2, g_bones[1].rot);
+
+	//M^(-1)ben1
+	//M^(-1)ben2
+	mat4 MI_ben1 = InvertMat4(M_ben1);
+	mat4 MI_ben2 = InvertMat4(M_ben2);
+
+	//M'_ben1 = T_vila * R_vila * R_anim
+	//M'_ben2 = T_vila * R_vila * R_anim
+	mat4 MP_ben1 = Mult(M_ben1, g_bones[0].rot);
+	mat4 MP_ben2 = Mult(M_ben2, g_bones[1].rot);
+
+
+	// fÃ¶r samtliga vertexar
 	for (row = 0; row < kMaxRow; row++)
 	{
 		for (corner = 0; corner < kMaxCorners; corner++)
@@ -202,27 +223,47 @@ void DeformCylinder()
 			// Deformera cylindern enligt det skelett som finns
 			// i g_bones.
 			//
-			// Gör hard skinning.
+			// GÃ¶r hard skinning.
 			//
-			// g_bones innehåller benen.
-			// g_vertsOrg innehåller ursprunglig vertexdata.
-			// g_vertsRes innehåller den vertexdata som skickas till OpenGL.
+			// g_bones innehÃ¥ller benen.
+			// g_vertsOrg innehÃ¥ller ursprunglig vertexdata.
+			// g_vertsRes innehÃ¥ller den vertexdata som skickas till OpenGL.
 			//
-			// row traverserar i cylinderns längdriktning,
+			// row traverserar i cylinderns lÃ¤ngdriktning,
 			// corner traverserar "runt" cylindern
-			
-			
+
+			//Transformation av vertex frÃ¥n benkoordinater till modellkoordinater
+
+			//FrÃ¥n modell- till ben-koordinater
+			//v_ben2 = M^(-1)_ben1 * M^(-1)_ben2 * v_m
+			//vec3 v_ben2 = MultVec3(Mult(MI_ben1, MI_ben2), g_vertsRes[row][corner]);
+
+			//FrÃ¥n ben- till modell-koordinater
+			//v_m = M_ben1 * M_ben2 * v_ben2
+			//vec3 v_m = MultVec3(Mult(M_ben1, M_ben2), v_ben2);
+
+			//v'_m = M'_ben1 * M'_ben2 * M^(-1)_ben2 * M^(-1)_ben1 * v_m
+			vec3 vPrim = MultVec3(Mult(Mult(MP_ben1, MP_ben2), Mult(MI_ben1, MI_ben2)), g_vertsOrg[row][corner]);
+
+			if( weight[row]  > 0 ){
+				g_vertsRes[row][corner].x = vPrim.x * weight[row];
+				g_vertsRes[row][corner].y = vPrim.y * weight[row];
+				g_vertsRes[row][corner].z = vPrim.z * weight[row];
+			}
+
 			// ---=========	Uppgift 2: Soft skinning i CPU ===========------
 			// Deformera cylindern enligt det skelett som finns
 			// i g_bones.
 			//
-			// Gör soft skinning.
+			// GÃ¶r soft skinning.
 			//
-			// g_bones innehåller benen.
-			// g_boneWeights innehåller blendvikter för benen.
-			// g_vertsOrg innehåller ursprunglig vertexdata.
-			// g_vertsRes innehåller den vertexdata som skickas till OpenGL.
-			
+			// g_bones innehÃ¥ller benen.
+			// g_boneWeights innehÃ¥ller blendvikter fÃ¶r benen.
+			// g_vertsOrg innehÃ¥ller ursprunglig vertexdata.
+			// g_vertsRes innehÃ¥ller den vertexdata som skickas till OpenGL.
+
+
+
 		}
 	}
 }
@@ -230,7 +271,7 @@ void DeformCylinder()
 
 /////////////////////////////////////////////
 //		A N I M A T E	B O N E S
-// Desc:	en väldigt enkel amination av skelettet
+// Desc:	en vÃ¤ldigt enkel amination av skelettet
 //			vrider ben 1 i en sin(counter) 
 void animateBones(void)
 {
@@ -239,7 +280,7 @@ void animateBones(void)
 	// Hur mycket skall vi vrida?
 	float angle = sin(time * 3.f) / 2.0f * 3.0f;
 
-	// rotera på ben 1
+	// rotera pÃ¥ ben 1
 	g_bones[1].rot = Rz(angle);
 //	printf("%f %f\n", angle, time);
 }
@@ -247,33 +288,33 @@ void animateBones(void)
 
 ///////////////////////////////////////////////
 //		S E T	B O N E	R O T A T I O N
-// Desc:	sätter bone rotationen i vertex shadern
+// Desc:	sï¿½tter bone rotationen i vertex shadern
 void setBoneRotation(void)
 {
-	// Uppgift 3 TODO: Här behöver du skicka över benens rotation
+	// Uppgift 3 TODO: HÃ¤r behÃ¶ver du skicka Ã¶ver benens rotation
 	// till vertexshadern
 }
 
 
 ///////////////////////////////////////////////
 //		 S E T	B O N E	L O C A T I O N
-// Desc:	sätter bone positionen i vertex shadern
+// Desc:	sï¿½tter bone positionen i vertex shadern
 void setBoneLocation(void)
 {
-	// Uppgift 3 TODO: Här behöver du skicka över benens position
+	// Uppgift 3 TODO: Hï¿½r behï¿½ver du skicka ï¿½ver benens position
 	// till vertexshadern
 }
 
 
 ///////////////////////////////////////////////
 //		 D R A W	C Y L I N D E R
-// Desc:	sätter bone positionen i vertex shadern
+// Desc:	sï¿½tter bone positionen i vertex shadern
 void DrawCylinder()
 {
 	animateBones();
 
 	// ---------=========	UPG 2 ===========---------
-	// Ersätt DeformCylinder med en vertex shader som gör vad DeformCylinder gör.
+	// Ersï¿½tt DeformCylinder med en vertex shader som gï¿½r vad DeformCylinder gï¿½r.
 	// Begynnelsen till shaderkoden ligger i filen "shader.vert" ...
 	
 	DeformCylinder();
