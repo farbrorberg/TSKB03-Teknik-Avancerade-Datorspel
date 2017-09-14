@@ -66,7 +66,8 @@ Point3D g_normalsRes[kMaxRow][kMaxCorners];
 // vertex attributes sent to OpenGL
 Point3D g_boneWeights[kMaxRow][kMaxCorners];
 
-float weight[kMaxRow] = {0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0};
+//float weight[kMaxRow] = {0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0};
+float weight[kMaxRow] = {0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0};
 
 Model *cylinderModel; // Collects all the above for drawing with glDrawElements
 
@@ -243,13 +244,13 @@ void DeformCylinder()
 			//vec3 v_m = MultVec3(Mult(M_ben1, M_ben2), v_ben2);
 
 			//v'_m = M'_ben1 * M'_ben2 * M^(-1)_ben2 * M^(-1)_ben1 * v_m
-			vec3 vPrim = MultVec3(Mult(Mult(MP_ben1, MP_ben2), Mult(MI_ben1, MI_ben2)), g_vertsOrg[row][corner]);
-
-			if( weight[row]  > 0 ){
-				g_vertsRes[row][corner].x = vPrim.x * weight[row];
-				g_vertsRes[row][corner].y = vPrim.y * weight[row];
-				g_vertsRes[row][corner].z = vPrim.z * weight[row];
-			}
+//			vec3 vPrim = MultVec3(Mult(Mult(MP_ben1, MP_ben2), Mult(MI_ben1, MI_ben2)), g_vertsOrg[row][corner]);
+//
+//			if( weight[row]  > 0 ){
+//				g_vertsRes[row][corner].x = vPrim.x * weight[row];
+//				g_vertsRes[row][corner].y = vPrim.y * weight[row];
+//				g_vertsRes[row][corner].z = vPrim.z * weight[row];
+//			}
 
 			// ---=========	Uppgift 2: Soft skinning i CPU ===========------
 			// Deformera cylindern enligt det skelett som finns
@@ -263,7 +264,16 @@ void DeformCylinder()
 			// g_vertsRes innehåller den vertexdata som skickas till OpenGL.
 
 
+			// v'_m = (w_1 * M_ben1 * v_1) + (w_2 * M_ben2 * v_2)
+			// (1 - weight[row] <=> The first 4 slots belong to bone1, the other 4 to bone2
+			vec3 vPrim = VectorAdd(
+					ScalarMult(MultVec3(M_ben1, g_vertsOrg[row][corner]),(1 - weight[row])),
+					ScalarMult(MultVec3(M_ben2, g_vertsOrg[row][corner]),weight[row])
+			);
 
+				g_vertsRes[row][corner].x = vPrim.x;
+				g_vertsRes[row][corner].y = vPrim.y;
+				g_vertsRes[row][corner].z = vPrim.z;
 		}
 	}
 }
