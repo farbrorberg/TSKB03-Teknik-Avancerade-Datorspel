@@ -77,7 +77,7 @@ typedef struct
 
   vec3 F, T; // accumulated force and torque
 
-//  mat4 J, Ji; We could have these but we can live without them for spheres.
+//  mat4 J, Ji; //We could have these but we can live without them for spheres.
   vec3 omega; // Angular momentum
   vec3 v; // Change in velocity
 
@@ -103,7 +103,7 @@ Material ballMt = { { 1.0, 1.0, 1.0, 1.0 }, { 1.0, 1.0, 1.0, 0.0 },
                 };
 
 
-enum {kNumBalls = 16}; // Change as desired, max 16
+enum {kNumBalls = 4}; // Change as desired, max 16
 
 //------------------------------Globals---------------------------------
 ModelTexturePair tableAndLegs, tableSurf;
@@ -161,6 +161,7 @@ void loadMaterial(Material mt)
 //---------------------------------- physics update and billiard table rendering ----------------------------------
 void updateWorld()
 {
+    int elasticity = 1;
 	// Zero forces
 	int i, j;
 	for (i = 0; i < kNumBalls; i++)
@@ -183,10 +184,23 @@ void updateWorld()
 	}
 
 	// Detect collisions, calculate speed differences, apply forces
+    float impulse;
 	for (i = 0; i < kNumBalls; i++)
         for (j = i+1; j < kNumBalls; j++)
         {
-            // YOUR CODE HERE
+            //Distance/collition check
+            vec3 distance = VectorSub(ball[i].X,ball[j].X);
+            if(Norm(distance) <= 2*kBallSize)
+            {
+                vec3 normal = Normalize(distance);
+                vec3 deltaVel = VectorSub(ball[i].v, ball[j].v);
+
+                impulse = -(elasticity+1)*DotProduct(normal,deltaVel);
+
+                ball[i].P = VectorAdd(ScalarMult(normal,impulse/(1.0/ball[i].mass+1.0)),ball[i].P);
+                ball[j].P = VectorAdd(ScalarMult(normal,-impulse/(1.0/ball[j].mass+1.0)),ball[j].P);
+
+            }
         }
 
 	// Control rotation here to reflect
@@ -196,24 +210,48 @@ void updateWorld()
     float rotSpeed;
 	for (i = 0; i < kNumBalls; i++)
 	{
+        /*
+         * NO FRICTION
+         */
+//        //Rotational speed relative to velocity of ball
+//        rotSpeed = t*0.01 * sqrt(
+//                ball[i].v.x * ball[i].v.x +
+//                ball[i].v.y * ball[i].v.y +
+//                ball[i].v.z * ball[i].v.z
+//        );
+//
+//        // y * velocity = correct rotation direction
+//        newRot = ArbRotate(
+//                CrossProduct(
+//                        SetVector(0.0, 1.0, 0.0),
+//                        ball[i].v),
+//                rotSpeed);
+//
+//        ball[i].R = newRot;
 
-        //Rotational speed relative to velocity of ball
-        rotSpeed = t*0.01 * sqrt(
-                ball[i].v.x * ball[i].v.x +
-                ball[i].v.y * ball[i].v.y +
-                ball[i].v.z * ball[i].v.z
-        );
 
-        // y * velocity = correct rotation direction
-        newRot = ArbRotate(
-                CrossProduct(
-                        SetVector(0.0, 1.0, 0.0),
-                        ball[i].v),
-                rotSpeed);
+        /*
+         * FRICTION
+         */
+        GLfloat J, Ji, fM;
 
-        ball[i].R = newRot;
-	}
+        // J = kBallSize * kBallSize * mass/12
+        J = kBallSize * kBallSize * (ball[i].mass/12);
+        Ji = 1 / (2 * J);
+        // omega = J^(-1) * L
+        ball[i].omega = ScalarMult(ball[i].L, Ji);
+        
+        // Frictional factor
+        fM = -0.5f;
 
+        vec3 friction = VectorAdd(CrossProduct(ball[i].omega, SetVector(0, -kBallSize, 0)), ball[i].v);
+        ball[i].F = VectorAdd(ScalarMult(friction, fM), ball[i].F);
+
+        // Torque = r * f
+        ball[i].T = VectorAdd( ball[i].T ,CrossProduct(SetVector(0, -kBallSize, 0), ScalarMult(friction, fM)));
+
+
+    }
 
 // Update state, follows the book closely
 	for (i = 0; i < kNumBalls; i++)
@@ -221,8 +259,6 @@ void updateWorld()
 		vec3 dX, dP, dL, dO;
 		mat4 Rd;
 
-		// Note: omega is not set. How do you calculate it?
-		// YOUR CODE HERE
 
 //		v := P * 1/mass
 		ball[i].v = ScalarMult(ball[i].P, 1.0/(ball[i].mass));
