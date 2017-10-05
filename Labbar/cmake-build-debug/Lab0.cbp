@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="Lab0"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/Users/Matthias/Medieteknik/TSBK03 - Teknik för Avancerade Datorspel/Labbar/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/Matthias/Medieteknik/TSBK03\ -\ Teknik\ för\ Avancerade\ Datorspel/Labbar/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/Matthias/Medieteknik/TSBK03\ -\ Teknik\ för\ Avancerade\ Datorspel/Labbar/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/Matthias/Medieteknik/TSBK03\ -\ Teknik\ för\ Avancerade\ Datorspel/Labbar/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/Matthias/Medieteknik/TSBK03\ -\ Teknik\ för\ Avancerade\ Datorspel/Labbar/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/Users/Matthias/Medieteknik/TSBK03 - Teknik för Avancerade Datorspel/Labbar/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/Matthias/Medieteknik/TSBK03\ -\ Teknik\ för\ Avancerade\ Datorspel/Labbar/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/Matthias/Medieteknik/TSBK03\ -\ Teknik\ för\ Avancerade\ Datorspel/Labbar/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/Matthias/Medieteknik/TSBK03\ -\ Teknik\ för\ Avancerade\ Datorspel/Labbar/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/Matthias/Medieteknik/TSBK03\ -\ Teknik\ för\ Avancerade\ Datorspel/Labbar/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/Users/Matthias/Medieteknik/TSBK03 - Teknik för Avancerade Datorspel/Labbar/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/Matthias/Medieteknik/TSBK03\ -\ Teknik\ för\ Avancerade\ Datorspel/Labbar/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/Matthias/Medieteknik/TSBK03\ -\ Teknik\ för\ Avancerade\ Datorspel/Labbar/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/Matthias/Medieteknik/TSBK03\ -\ Teknik\ för\ Avancerade\ Datorspel/Labbar/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/Matthias/Medieteknik/TSBK03\ -\ Teknik\ för\ Avancerade\ Datorspel/Labbar/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Lab0">
+				<Option output="/Users/Matthias/Medieteknik/TSBK03 - Teknik för Avancerade Datorspel/Labbar/cmake-build-debug/Lab0" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/Matthias/Medieteknik/TSBK03 - Teknik för Avancerade Datorspel/Labbar/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../lib/clang/8.1.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/Matthias/Medieteknik/TSBK03\ -\ Teknik\ för\ Avancerade\ Datorspel/Labbar/cmake-build-debug/Makefile&quot;  VERBOSE=1 Lab0"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/Matthias/Medieteknik/TSBK03\ -\ Teknik\ för\ Avancerade\ Datorspel/Labbar/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/Matthias/Medieteknik/TSBK03\ -\ Teknik\ för\ Avancerade\ Datorspel/Labbar/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/Matthias/Medieteknik/TSBK03\ -\ Teknik\ för\ Avancerade\ Datorspel/Labbar/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="Lab0/fast">
+				<Option output="/Users/Matthias/Medieteknik/TSBK03 - Teknik för Avancerade Datorspel/Labbar/cmake-build-debug/Lab0" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/Matthias/Medieteknik/TSBK03 - Teknik för Avancerade Datorspel/Labbar/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../lib/clang/8.1.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j4 -f &quot;/Users/Matthias/Medieteknik/TSBK03\ -\ Teknik\ för\ Avancerade\ Datorspel/Labbar/cmake-build-debug/Makefile&quot;  VERBOSE=1 Lab0/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/Users/Matthias/Medieteknik/TSBK03\ -\ Teknik\ för\ Avancerade\ Datorspel/Labbar/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/Users/Matthias/Medieteknik/TSBK03\ -\ Teknik\ för\ Avancerade\ Datorspel/Labbar/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/Users/Matthias/Medieteknik/TSBK03\ -\ Teknik\ för\ Avancerade\ Datorspel/Labbar/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/Users/Matthias/Medieteknik/TSBK03 - Teknik för Avancerade Datorspel/Labbar/Lab0/lab0">
+			<Option target="Lab0"/>
+		</Unit>
+		<Unit filename="/Users/Matthias/Medieteknik/TSBK03 - Teknik för Avancerade Datorspel/Labbar/Lab0/lab0.c">
+			<Option target="Lab0"/>
+		</Unit>
+		<Unit filename="/Users/Matthias/Medieteknik/TSBK03 - Teknik för Avancerade Datorspel/Labbar/Lab0/lab0.frag">
+			<Option target="Lab0"/>
+		</Unit>
+		<Unit filename="/Users/Matthias/Medieteknik/TSBK03 - Teknik för Avancerade Datorspel/Labbar/Lab0/lab0.vert">
+			<Option target="Lab0"/>
+		</Unit>
+		<Unit filename="/Users/Matthias/Medieteknik/TSBK03 - Teknik för Avancerade Datorspel/Labbar/Lab0/makefile">
+			<Option target="Lab0"/>
+		</Unit>
+		<Unit filename="/Users/Matthias/Medieteknik/TSBK03 - Teknik för Avancerade Datorspel/Labbar/Lab0/makefile (copy)">
+			<Option target="Lab0"/>
+		</Unit>
+		<Unit filename="/Users/Matthias/Medieteknik/TSBK03 - Teknik för Avancerade Datorspel/Labbar/Lab0/objects/bilskiss.obj">
+			<Option target="Lab0"/>
+		</Unit>
+		<Unit filename="/Users/Matthias/Medieteknik/TSBK03 - Teknik för Avancerade Datorspel/Labbar/Lab0/objects/bunnyplus.obj">
+			<Option target="Lab0"/>
+		</Unit>
+		<Unit filename="/Users/Matthias/Medieteknik/TSBK03 - Teknik för Avancerade Datorspel/Labbar/Lab0/objects/cubeplus.obj">
+			<Option target="Lab0"/>
+		</Unit>
+		<Unit filename="/Users/Matthias/Medieteknik/TSBK03 - Teknik för Avancerade Datorspel/Labbar/Lab0/objects/stanford-bunny.obj">
+			<Option target="Lab0"/>
+		</Unit>
+		<Unit filename="/Users/Matthias/Medieteknik/TSBK03 - Teknik för Avancerade Datorspel/Labbar/Lab0/objects/teapot.obj">
+			<Option target="Lab0"/>
+		</Unit>
+		<Unit filename="/Users/Matthias/Medieteknik/TSBK03 - Teknik för Avancerade Datorspel/Labbar/Lab0/objects/teddy.obj">
+			<Option target="Lab0"/>
+		</Unit>
+		<Unit filename="/Users/Matthias/Medieteknik/TSBK03 - Teknik för Avancerade Datorspel/Labbar/Lab0/textures/bilskissred.tga">
+			<Option target="Lab0"/>
+		</Unit>
+		<Unit filename="/Users/Matthias/Medieteknik/TSBK03 - Teknik för Avancerade Datorspel/Labbar/Lab0/textures/conc.tga">
+			<Option target="Lab0"/>
+		</Unit>
+		<Unit filename="/Users/Matthias/Medieteknik/TSBK03 - Teknik för Avancerade Datorspel/Labbar/Lab0/textures/dirt.tga">
+			<Option target="Lab0"/>
+		</Unit>
+		<Unit filename="/Users/Matthias/Medieteknik/TSBK03 - Teknik för Avancerade Datorspel/Labbar/Lab0/textures/grass.tga">
+			<Option target="Lab0"/>
+		</Unit>
+		<Unit filename="/Users/Matthias/Medieteknik/TSBK03 - Teknik för Avancerade Datorspel/Labbar/Lab0/textures/maskros512.tga">
+			<Option target="Lab0"/>
+		</Unit>
+		<Unit filename="/Users/Matthias/Medieteknik/TSBK03 - Teknik för Avancerade Datorspel/Labbar/common/GL_utilities.c">
+			<Option target="Lab0"/>
+		</Unit>
+		<Unit filename="/Users/Matthias/Medieteknik/TSBK03 - Teknik för Avancerade Datorspel/Labbar/common/GL_utilities.h">
+			<Option target="Lab0"/>
+		</Unit>
+		<Unit filename="/Users/Matthias/Medieteknik/TSBK03 - Teknik för Avancerade Datorspel/Labbar/common/Linux/MicroGlut.c">
+			<Option target="Lab0"/>
+		</Unit>
+		<Unit filename="/Users/Matthias/Medieteknik/TSBK03 - Teknik för Avancerade Datorspel/Labbar/common/Linux/MicroGlut.h">
+			<Option target="Lab0"/>
+		</Unit>
+		<Unit filename="/Users/Matthias/Medieteknik/TSBK03 - Teknik för Avancerade Datorspel/Labbar/common/LoadTGA.c">
+			<Option target="Lab0"/>
+		</Unit>
+		<Unit filename="/Users/Matthias/Medieteknik/TSBK03 - Teknik för Avancerade Datorspel/Labbar/common/LoadTGA.h">
+			<Option target="Lab0"/>
+		</Unit>
+		<Unit filename="/Users/Matthias/Medieteknik/TSBK03 - Teknik för Avancerade Datorspel/Labbar/common/Mac/MicroGlut.h">
+			<Option target="Lab0"/>
+		</Unit>
+		<Unit filename="/Users/Matthias/Medieteknik/TSBK03 - Teknik för Avancerade Datorspel/Labbar/common/VectorUtils3.c">
+			<Option target="Lab0"/>
+		</Unit>
+		<Unit filename="/Users/Matthias/Medieteknik/TSBK03 - Teknik för Avancerade Datorspel/Labbar/common/VectorUtils3.h">
+			<Option target="Lab0"/>
+		</Unit>
+		<Unit filename="/Users/Matthias/Medieteknik/TSBK03 - Teknik för Avancerade Datorspel/Labbar/common/Windows/MicroGlut.c">
+			<Option target="Lab0"/>
+		</Unit>
+		<Unit filename="/Users/Matthias/Medieteknik/TSBK03 - Teknik för Avancerade Datorspel/Labbar/common/Windows/MicroGlut.h">
+			<Option target="Lab0"/>
+		</Unit>
+		<Unit filename="/Users/Matthias/Medieteknik/TSBK03 - Teknik för Avancerade Datorspel/Labbar/common/Windows/glew.c">
+			<Option target="Lab0"/>
+		</Unit>
+		<Unit filename="/Users/Matthias/Medieteknik/TSBK03 - Teknik för Avancerade Datorspel/Labbar/common/Windows/glew.h">
+			<Option target="Lab0"/>
+		</Unit>
+		<Unit filename="/Users/Matthias/Medieteknik/TSBK03 - Teknik för Avancerade Datorspel/Labbar/common/Windows/wglew.h">
+			<Option target="Lab0"/>
+		</Unit>
+		<Unit filename="/Users/Matthias/Medieteknik/TSBK03 - Teknik för Avancerade Datorspel/Labbar/common/loadobj.c">
+			<Option target="Lab0"/>
+		</Unit>
+		<Unit filename="/Users/Matthias/Medieteknik/TSBK03 - Teknik för Avancerade Datorspel/Labbar/common/loadobj.h">
+			<Option target="Lab0"/>
+		</Unit>
+		<Unit filename="/Users/Matthias/Medieteknik/TSBK03 - Teknik för Avancerade Datorspel/Labbar/common/zpr.c">
+			<Option target="Lab0"/>
+		</Unit>
+		<Unit filename="/Users/Matthias/Medieteknik/TSBK03 - Teknik för Avancerade Datorspel/Labbar/common/zpr.h">
+			<Option target="Lab0"/>
+		</Unit>
+		<Unit filename="/Users/Matthias/Medieteknik/TSBK03 - Teknik för Avancerade Datorspel/Labbar/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

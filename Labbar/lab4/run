@@ -1,0 +1,6 @@
+#!/bin/bash
+
+gcc lab4.c SpriteLight.c ../common/*.c ../common/Mac/MicroGlut.m -o lab4 -framework OpenGL -framework Cocoa -I../common/Mac -I../common -w
+
+./lab4
+
